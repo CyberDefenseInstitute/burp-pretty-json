@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>jp.cyberdefense.burp</groupId>
 	<artifactId>pretty-json</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.1-SNAPSHOT</version>
 	<name>pretty-json</name>
 	<description>a pretty json printer for burpsuite</description>
 	<properties>
