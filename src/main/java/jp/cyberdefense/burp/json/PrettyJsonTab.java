@@ -18,6 +18,7 @@
 package jp.cyberdefense.burp.json;
 
 import java.awt.Component;
+import java.util.List;
 import org.apache.log4j.Logger;
 import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
@@ -38,6 +39,7 @@ public class PrettyJsonTab implements IMessageEditorTab {
 	private boolean editable;
 	private ITextEditor txtInput;
 	private byte[] currentMessage;
+  private boolean isRequest;
 
 	public PrettyJsonTab(IMessageEditorController controller, boolean editable,
 			IBurpExtenderCallbacks callbacks, IExtensionHelpers helpers) {
@@ -75,7 +77,7 @@ public class PrettyJsonTab implements IMessageEditorTab {
 		} else {
 			PrettyPrintJson json = PrettyPrintJson.getInstance();
 			// retrieve the data parameter
-			int offset = helpers.analyzeResponse(content).getBodyOffset();
+			int offset = isReq ? helpers.analyzeRequest(content).getBodyOffset() : helpers.analyzeResponse(content).getBodyOffset();
 			// deserialize the parameter value
 			String msg = new String(content, offset, content.length-offset);
 
@@ -88,6 +90,7 @@ public class PrettyJsonTab implements IMessageEditorTab {
 
 		// remember the displayed content
 		currentMessage = content;
+    isRequest = isReq;
 	}
 
 	public byte[] getMessage() {
@@ -95,26 +98,24 @@ public class PrettyJsonTab implements IMessageEditorTab {
         if (txtInput.isTextModified())
         {
             // reserialize the data
-            byte[] text = txtInput.getText();
-            String input = helpers.urlEncode(helpers.base64Encode(text));
-            
-            // update the request with the new parameter value
-            return helpers.updateParameter(currentMessage, helpers.buildParameter("data", input, IParameter.PARAM_BODY));
+            byte[] body = txtInput.getText();
+			      List<String> headers = isRequest ? helpers.analyzeRequest(currentMessage).getHeaders() : helpers.analyzeResponse(currentMessage).getHeaders();
+            return helpers.buildHttpMessage(headers, body);
         }
         else return currentMessage;
 	}
 
-	private boolean isJson(byte[] content, boolean isRes) {
+	private boolean isJson(byte[] content, boolean isReq) {
 		boolean isJson = false;
 		// in case of response and json 
-		if (!isRes){
+		if (!isReq){
 			IResponseInfo iRes = helpers.analyzeResponse(content);
 			String mime = iRes.getStatedMimeType();
 			if (mime.equalsIgnoreCase("JSON"))
 				return true;
 		}
 		// in case of request and json
-		if (isRes){
+		if (isReq){
 			IRequestInfo iReq = helpers.analyzeRequest(content);
 			if (IRequestInfo.CONTENT_TYPE_JSON == iReq.getContentType())
 				return true;
