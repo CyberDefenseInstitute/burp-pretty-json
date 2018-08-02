@@ -2,7 +2,7 @@
 
 pretty-json is a Java Extension plugin for Burp Suite that can be used to view JSON file format for humans
 
-###*License*
+### *License*
 
 pretty-json is released under the [Apache 2.0 license](LICENSE).
 
