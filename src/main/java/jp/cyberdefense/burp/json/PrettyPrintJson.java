@@ -16,7 +16,8 @@
 
 package jp.cyberdefense.burp.json;
 
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -27,7 +28,7 @@ import com.google.gson.JsonParser;
  * @author Toru Tomita
  */
 public class PrettyPrintJson {
-	static Logger log = Logger.getLogger(PrettyPrintJson.class.toString());
+	static Logger log = LogManager.getLogger(PrettyPrintJson.class.toString());
 	private static PrettyPrintJson instance;
 	private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 	private JsonParser jp = new JsonParser();

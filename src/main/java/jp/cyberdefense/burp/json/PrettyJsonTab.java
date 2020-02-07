@@ -19,7 +19,10 @@ package jp.cyberdefense.burp.json;
 
 import java.awt.Component;
 import java.util.List;
-import org.apache.log4j.Logger;
+
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
 import burp.IBurpExtenderCallbacks;
 import burp.IExtensionHelpers;
 import burp.IMessageEditorController;
@@ -33,7 +36,7 @@ import burp.ITextEditor;
  * @author Toru Tomita
  */
 public class PrettyJsonTab implements IMessageEditorTab {
-	static Logger log = Logger.getLogger(PrettyJsonTab.class.toString());
+	static Logger log = LogManager.getLogger(PrettyJsonTab.class.toString());
 	private IBurpExtenderCallbacks callbacks;
 	private IExtensionHelpers helpers;
 	private boolean editable;
